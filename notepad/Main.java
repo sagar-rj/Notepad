@@ -124,7 +124,7 @@ public class Main extends JFrame implements ActionListener {
         pane.setBorder(BorderFactory.createEmptyBorder());
         add(pane);
 
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setBounds(400,100,900,500);
 
         setVisible(true);
     }
