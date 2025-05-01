@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,7 +18,6 @@ public class Main extends JFrame implements ActionListener {
 
     Main(){
         setTitle("Notepad");
-
         //Notepad Icon
         ImageIcon notepadIcon = new ImageIcon(ClassLoader.getSystemResource("notepad/icons/notepad.png"));
         Image icon = notepadIcon.getImage();
@@ -66,7 +67,7 @@ public class Main extends JFrame implements ActionListener {
         edit.setFont(new Font ("AERIAL",Font.PLAIN,14));
 
         //Edit drop down Option - copy, paste, cut 
-        JMenuItem copy = new JMenuItem("copy");
+        JMenuItem copy = new JMenuItem("Copy");
         copy.addActionListener(this);
         copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 
@@ -90,13 +91,6 @@ public class Main extends JFrame implements ActionListener {
         italic.addActionListener(this);
         italic.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 
-        JMenuItem undo = new JMenuItem("Undo");
-        undo.addActionListener(this);
-        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-
-        JMenuItem redo = new JMenuItem("Redo");
-        redo.addActionListener(this);
-        redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 
         edit.add(copy);
         edit.add(paste);
@@ -104,8 +98,6 @@ public class Main extends JFrame implements ActionListener {
         edit.add(select);
         edit.add(bold);
         edit.add(italic);
-        edit.add(undo);
-        edit.add(redo);
 
         menubar.add(edit);
 
@@ -188,6 +180,12 @@ public class Main extends JFrame implements ActionListener {
             System.exit(0);
         }else if(ae.getActionCommand().equals("Copy")){
             text = area.getSelectedText();
+            String selectedText = area.getSelectedText();
+            if (selectedText != null) {
+                StringSelection selection = new StringSelection(selectedText);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(selection, null);
+            }
         }else if(ae.getActionCommand().equals("Paste")){
             area.insert(text, area.getCaretPosition());
         }else if(ae.getActionCommand().equals("Cut")){
@@ -197,9 +195,11 @@ public class Main extends JFrame implements ActionListener {
             area.selectAll();
         }else if(ae.getActionCommand().equals("About")){
             new About().setVisible(true);
+        }else if(ae.getActionCommand().equals("Bold")){
+            area.setFont(new Font("SAN_SERIF", Font.BOLD, 20));
+        }else if(ae.getActionCommand().equals("Italic")){
+            area.setFont(new Font("SAN_SERIF", Font.ITALIC, 20));
         }
-
-
     }
     
     public static void main(String[] args) {
